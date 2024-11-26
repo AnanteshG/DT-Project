@@ -15,12 +15,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// MongoDB client
 const client = new MongoClient(url);
 
 let db;
 
-// Connect to MongoDB
 client.connect()
     .then(() => {
         db = client.db(dbName);
@@ -31,7 +29,6 @@ client.connect()
         process.exit(1);
     });
 
-// Routes
 
 // 1. GET /events?id=:event_id
 app.get('/api/v3/app/events', async (req, res) => {
@@ -65,7 +62,7 @@ app.get('/api/v3/app/events', async (req, res) => {
     try {
         const events = await db.collection('events')
             .find()
-            .sort({ schedule: -1 }) // Latest events by timestamp
+            .sort({ schedule: -1 }) 
             .skip(skip)
             .limit(parseInt(limit))
             .toArray();
@@ -162,7 +159,6 @@ app.delete('/api/v3/app/events/:id', async (req, res) => {
     }
 });
 
-// Start server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
